@@ -2,21 +2,21 @@
 Shell script to call other scripts controlling their execution
 
 # Options
-###--preexec
+### --preexec
 pre-execution, like "php" or "sh"
 
-###--script
+### --script
 The script you will run (with full path)
 
-###--log_folder
+### --log_folder
 Where to store logs?
 Set only the path, the filename will always be the script_name.log
 
-###--lock_folder
+### --lock_folder
 Where to store lock_files?
 Defaults to /tmp if null
 
-###--timeout
+### --timeout
 Set a timeout for the script. If null there will be no timeout
 
 # Examples
