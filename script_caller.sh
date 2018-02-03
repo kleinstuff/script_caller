@@ -24,6 +24,7 @@
 #
 #	ToDo:
 #       Allow user commands on error
+#       Create a statistics file to save how much time each run takes
 #
 #---------------------------------------------------------------------
 #
@@ -54,7 +55,7 @@ check_lock_file() {
     if [ -e "${LOCK_FILE}" ]
     then
         echo "There is already a process running: ${SCRIPT}"
-        echo "With $(grep PID ${LOCK_FILE})"
+        echo -ne "\n\n $(date) Skipping because there is already a process running with $(grep PID ${LOCK_FILE}) \n" >> ${LOG_FILE}
         exit 1
     fi
 }
@@ -67,7 +68,9 @@ create_lock_file() {
 
 # YOLO
 run_command() {
-    ${SCRIPT_TIMEOUT} ${SCRIPT_PREEXEC} ${SCRIPT_PATH}/${SCRIPT} > ${LOG_FILE} 2>&1
+    echo -ne "\n\n\n$(date) Starting ${SCRIPT}\n" >> ${LOG_FILE}
+    ${SCRIPT_TIMEOUT} ${SCRIPT_PREEXEC} ${SCRIPT_PATH}/${SCRIPT} >> ${LOG_FILE} 2>&1
+    echo "$(date) ENDING..." >> ${LOG_FILE}
     EXIT_CODE="$?"
     if [ "${EXIT_CODE}" != "0" ]
     then
@@ -77,7 +80,7 @@ run_command() {
         fi
         echo "SCRIPT ERROR!"
     fi
-
+    
     rm -rf ${LOCK_FILE}
 }
 
