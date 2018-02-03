@@ -49,6 +49,7 @@ check_lock_file() {
     if [ -z "${LOCK_FOLDER}" ]
     then
         LOCK_FOLDER="/tmp"
+        LOCK_FILE="${LOCK_FOLDER}/${SCRIPT}"
     fi
     if [ -e "${LOCK_FILE}" ]
     then
