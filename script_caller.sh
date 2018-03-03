@@ -86,7 +86,7 @@ run_command() {
         echo "SCRIPT ERROR!"
     fi
     
-    #rm -rf ${LOCK_FILE}
+    rm -rf ${LOCK_FILE}
 }
 
 
