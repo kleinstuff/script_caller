@@ -56,6 +56,11 @@ check_lock_file() {
     then
         echo "There is already a process running: ${SCRIPT}"
         echo -ne "\n\n$(date) Skipping because there is already a process running with $(grep PID ${LOCK_FILE}) \n\n" >> ${LOG_FILE}
+        if [ -n "${EXTRA_ERROR_LOG}" ]
+        then
+            echo -ne  "\n$(date) Aborting the run of: ${SCRIPT}\n$(date) Skipping because there is already a process running with $(grep PID ${LOCK_FILE}) \n\n" >> ${EXTRA_ERROR_LOG}
+        fi
+
         exit 1
     fi
 }
@@ -69,7 +74,7 @@ create_lock_file() {
 # YOLO
 run_command() {
     echo -ne "\n\n\n$(date) Starting ${SCRIPT} with PID $$\n" >> ${LOG_FILE}
-    ${SCRIPT_TIMEOUT} ${SCRIPT_PREEXEC} ${SCRIPT_PATH}/${SCRIPT} >> ${LOG_FILE} 2>&1
+    ${SCRIPT_TIMEOUT} ${SCRIPT_HANDLER} ${SCRIPT_PATH}/${SCRIPT} >> ${LOG_FILE} 2>&1
     echo "$(date) ENDING..." >> ${LOG_FILE}
     EXIT_CODE="$?"
     if [ "${EXIT_CODE}" != "0" ]
@@ -84,13 +89,36 @@ run_command() {
     #rm -rf ${LOCK_FILE}
 }
 
+
+abouthelp() {
+    echo -ne " 
+    Options:\n
+    \t --script_handler: The handler to run the script ex.: /bin/bash, /usr/bin/php, python \n
+    \t --script: The actual script to be running \n
+    \t --log_folder: Folder to save logs, the logname will be the script name.log \n
+    \t --lock_folder: Place to save the lock file. Default: /tmp \n
+    \t --timeout: Sets a timeout and cancel execution if exceeded. Optional, Default: null \n
+    \t --extra_error_log: Sets a secondary error log to save info about executions canceled 
+    \t\t because another process was already running.
+    \t\t This can be good to monitor and check if your processes had not stopped running
+    
+    Example:
+    script_caller.sh \\
+        --script_handler php \\
+        --script /foo/bar.php \\
+        --log_folder /var/log \\
+        --lock_folder /tmp \\
+        --timeout 10 \\
+        --extra_error_log /var/log/script_errors.log\n\n"
+}
+
 # GET PARAMETERS
 while (( "$#" ))
 do 
     case "${1}" in
-        "--preexec")
+        "--script_handler")
             shift
-            SCRIPT_PREEXEC=${1}
+            SCRIPT_HANDLER=${1}
             ;;
         "--script")
             shift
@@ -110,6 +138,14 @@ do
         "--timeout")
             shift
             SCRIPT_TIMEOUT=${1}
+            ;;
+        "--extra_error_log")
+            shift
+            EXTRA_ERROR_LOG=${1}
+            ;;
+        "help")
+            abouthelp
+            exit 0
             ;;
     esac
   shift 
