@@ -19,6 +19,12 @@ Defaults to /tmp if null
 ### --timeout
 Set a timeout for the script. If null there will be no timeout
 
+### --extra_log_file
+To log failed attempts on running the script because another script was already running.
+
+### help
+Help info
+
 # Examples
 ```
 ./script_caller.sh --script test.sh  --preexec sh  --log_folder /tmp     --timeout 10
