@@ -19,7 +19,7 @@ Defaults to /tmp if null
 ### --timeout
 Set a timeout for the script. If null there will be no timeout
 
-### --extra_log_file
+### --extra_rror_log
 To log failed attempts on running the script because another script was already running.
 
 ### help
