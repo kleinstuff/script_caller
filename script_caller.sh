@@ -71,6 +71,14 @@ create_lock_file() {
     echo "PID: $$" >> ${LOCK_FILE}
 }
 
+# ENSURES THAT THE LOG FOLDER EXISTS
+create_log_folder() {
+    if [ ! -d ${LOG_FOLDER} ]
+    then
+        mkdir ${LOG_FOLDER}
+    fi
+}
+
 # YOLO
 run_command() {
     echo -ne "\n\n\n$(date) Starting ${SCRIPT} with PID $$\n" >> ${LOG_FILE}
@@ -156,4 +164,5 @@ done
 check_timeout
 check_lock_file
 create_lock_file
+create_log_folder
 run_command
