@@ -67,6 +67,11 @@ check_lock_file() {
 
 # CREATE A LOCK FILE BEFORE RUN
 create_lock_file() {
+    if [ ! -d ${LOCK_FOLDER} ]
+    then
+        mkdir ${LOCK_FOLDER}
+    fi
+
     echo "Script ${SCRIPT} started at $(date)" > ${LOCK_FILE}
     echo "PID: $$" >> ${LOCK_FILE}
 }
