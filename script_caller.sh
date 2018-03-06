@@ -58,7 +58,7 @@ check_lock_file() {
         echo -ne "\n\n$(date) Skipping because there is already a process running with $(grep PID ${LOCK_FILE}) \n\n" >> ${LOG_FILE}
         if [ -n "${EXTRA_ERROR_LOG}" ]
         then
-            echo -ne  "\n$(date) Aborting the run of: ${SCRIPT}\n$(date) Skipping because there is already a process running with $(grep PID ${LOCK_FILE}) \n\n" >> ${EXTRA_ERROR_LOG}
+            echo -ne  "\n$(date) Aborting the run of: ${SCRIPT}\n$(date) Skipping because there is a process already running with PID $(cat ${LOCK_FILE}) \n\n" >> ${EXTRA_ERROR_LOG}
         fi
 
         exit 1
