@@ -36,7 +36,7 @@
 #------------------------------------------------------------------
 
 # CHECK IF THE DIR OF LOG_FILE EXISTS
-check_log_file() {
+check_log_folder() {
    if [ ! -d ${LOG_FOLDER} ] 
    then
        mkdir -p ${LOG_FOLDER}
