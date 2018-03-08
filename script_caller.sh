@@ -35,7 +35,14 @@
 #
 #------------------------------------------------------------------
 
-
+# CHECK IF THE DIR OF LOG_FILE EXISTS
+check_log_file() {
+   if [ ! -d ${LOG_FOLDER} ] 
+   then
+       mkdir -p ${LOG_FOLDER}
+   fi
+   LOG_FILE="${LOG_FOLDER}/${SCRIPT}.log"
+}
 # IF SCRIPT_TIMEOUT IS SET, ADD timeout
 check_timeout() {
     if [ -n "${SCRIPT_TIMEOUT}" ]
@@ -141,7 +148,6 @@ do
         "--log_folder")
             shift
             LOG_FOLDER=${1}
-            LOG_FILE="${LOG_FOLDER}/${SCRIPT}.log"
             ;;
         "--lock_folder")
             shift
@@ -166,6 +172,7 @@ done
 
 
 # RUN
+check_log_folder
 check_timeout
 check_lock_file
 create_lock_file
